@@ -1,0 +1,9 @@
+[build]
+  base = "web"
+  publish = "."
+  command = ""
+
+[[redirects]]
+  from = "/*"
+  to = "/painel-admin.html"
+  status = 200

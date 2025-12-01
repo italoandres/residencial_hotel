@@ -1,4 +1,4 @@
-const API_URL = '/api';
+const API_URL = 'https://residencial-hotel-api.onrender.com/api';
 let token = localStorage.getItem('token');
 let quartos = [];
 let reservas = [];
