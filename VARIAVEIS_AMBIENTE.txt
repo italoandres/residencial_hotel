@@ -1,0 +1,119 @@
+===========================================
+VARIÁVEIS DE AMBIENTE PARA DEPLOY
+Hotel Residencial Hortel
+===========================================
+
+===========================================
+BACKEND (Render Web Service)
+===========================================
+
+Copie e cole estas variáveis no Render ao criar o Web Service:
+
+NODE_ENV=production
+
+PORT=3000
+
+SUPABASE_URL=COLE_SUA_URL_DO_SUPABASE_AQUI
+
+SUPABASE_ANON_KEY=COLE_SUA_CHAVE_DO_SUPABASE_AQUI
+
+JWT_SECRET=hotel_residencial_hortel_secret_2024_seguro
+
+===========================================
+ONDE ENCONTRAR AS CREDENCIAIS DO SUPABASE
+===========================================
+
+1. Acesse: https://supabase.com/dashboard
+2. Selecione seu projeto
+3. Vá em Settings → API
+4. Copie:
+   - Project URL → SUPABASE_URL
+   - anon/public key → SUPABASE_ANON_KEY
+
+===========================================
+FRONTEND (Render Static Site)
+===========================================
+
+Copie e cole esta variável no Render ao criar o Static Site:
+
+VITE_API_URL=COLE_A_URL_DO_BACKEND_AQUI
+
+IMPORTANTE: A URL do backend é gerada DEPOIS que você criar o Web Service.
+Ela será algo como: https://hotel-residencial-hortel-api.onrender.com
+
+===========================================
+EXEMPLO COMPLETO
+===========================================
+
+BACKEND:
+--------
+NODE_ENV=production
+PORT=3000
+SUPABASE_URL=https://xyzabc123.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+JWT_SECRET=hotel_residencial_hortel_secret_2024_seguro
+
+FRONTEND:
+---------
+VITE_API_URL=https://hotel-residencial-hortel-api.onrender.com
+
+===========================================
+CHECKLIST
+===========================================
+
+Backend:
+[ ] NODE_ENV configurado
+[ ] PORT configurado
+[ ] SUPABASE_URL configurado (do seu projeto Supabase)
+[ ] SUPABASE_ANON_KEY configurado (do seu projeto Supabase)
+[ ] JWT_SECRET configurado
+
+Frontend:
+[ ] VITE_API_URL configurado (URL do backend no Render)
+
+===========================================
+IMPORTANTE
+===========================================
+
+1. NUNCA compartilhe suas chaves em público
+2. NUNCA faça commit das chaves no GitHub
+3. Use as variáveis de ambiente do Render
+4. O arquivo .env local NÃO vai para o GitHub (está no .gitignore)
+
+===========================================
+TESTAR SE ESTÁ FUNCIONANDO
+===========================================
+
+Depois do deploy:
+
+1. Acesse a URL do backend + /health
+   Exemplo: https://hotel-residencial-hortel-api.onrender.com/health
+   Deve retornar: {"status":"ok"}
+
+2. Acesse a URL do frontend
+   Exemplo: https://hotel-residencial-hortel-web.onrender.com
+   Deve mostrar a tela de login
+
+3. Faça login:
+   Email: admin@residencialhortel.com
+   Senha: admin123
+
+===========================================
+SE NÃO FUNCIONAR
+===========================================
+
+1. Verifique os logs no Render:
+   - Clique no serviço
+   - Vá em "Logs"
+   - Procure por erros
+
+2. Verifique se as variáveis estão corretas:
+   - Clique no serviço
+   - Vá em "Environment"
+   - Confirme que todas estão lá
+
+3. Verifique se o Supabase está acessível:
+   - Acesse o dashboard do Supabase
+   - Confirme que o projeto está ativo
+
+===========================================

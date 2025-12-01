@@ -1,0 +1,80 @@
+===========================================
+COMANDOS GIT PARA DEPLOY
+Hotel Residencial Hortel
+===========================================
+
+IMPORTANTE: Execute estes comandos na pasta raiz do projeto
+
+===========================================
+PASSO 1: INICIALIZAR REPOSITÓRIO
+===========================================
+
+git init
+git add .
+git commit -m "Sistema Hotel Residencial Hortel - Pronto para deploy"
+
+===========================================
+PASSO 2: CRIAR REPOSITÓRIO NO GITHUB
+===========================================
+
+1. Acesse: https://github.com/new
+2. Nome do repositório: hotel-residencial-hortel
+3. Deixe PÚBLICO
+4. NÃO adicione README, .gitignore ou licença
+5. Clique em "Create repository"
+
+===========================================
+PASSO 3: CONECTAR E ENVIAR CÓDIGO
+===========================================
+
+SUBSTITUA "SEU_USUARIO" pelo seu usuário do GitHub!
+
+git remote add origin https://github.com/SEU_USUARIO/hotel-residencial-hortel.git
+git branch -M main
+git push -u origin main
+
+===========================================
+EXEMPLO COMPLETO (COPIE E COLE)
+===========================================
+
+# Se seu usuário for "joaosilva", use:
+git remote add origin https://github.com/joaosilva/hotel-residencial-hortel.git
+git branch -M main
+git push -u origin main
+
+===========================================
+SE DER ERRO
+===========================================
+
+Erro: "remote origin already exists"
+Solução:
+git remote remove origin
+git remote add origin https://github.com/SEU_USUARIO/hotel-residencial-hortel.git
+
+Erro: "failed to push"
+Solução:
+git pull origin main --allow-unrelated-histories
+git push -u origin main
+
+Erro: "authentication failed"
+Solução:
+1. Vá em GitHub → Settings → Developer settings → Personal access tokens
+2. Gere um novo token com permissão "repo"
+3. Use o token como senha quando pedir
+
+===========================================
+VERIFICAR SE DEU CERTO
+===========================================
+
+Acesse: https://github.com/SEU_USUARIO/hotel-residencial-hortel
+
+Você deve ver todos os arquivos do projeto!
+
+===========================================
+PRÓXIMO PASSO
+===========================================
+
+Agora vá para o Render e faça o deploy seguindo o arquivo:
+DEPLOY_RAPIDO.md
+
+===========================================

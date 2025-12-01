@@ -1,0 +1,262 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                                                                  ║
+║              📁 ESTRUTURA DO PROJETO                             ║
+║              Sistema Residencial Hortel                          ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+hotel_system_base/
+│
+├── 🚀 SCRIPTS DE INICIALIZAÇÃO
+│   ├── INICIAR.bat              ← Inicia API + Painel automaticamente
+│   └── verificar.bat            ← Verifica se tudo está configurado
+│
+├── 📖 DOCUMENTAÇÃO PRINCIPAL
+│   ├── README.md                ← Documentação principal do projeto
+│   ├── INDEX.md                 ← Índice completo de documentação
+│   ├── COMO_USAR.md             ← Guia passo a passo de uso
+│   ├── RESUMO_EXECUTIVO.md      ← Visão geral executiva
+│   ├── ARQUITETURA.md           ← Arquitetura e diagramas
+│   ├── TROUBLESHOOTING.md       ← Solução de problemas
+│   ├── CHECKLIST.md             ← Checklist de verificação
+│   ├── INICIO.txt               ← Guia visual ASCII
+│   └── ESTRUTURA.txt            ← Este arquivo
+│
+├── 🔧 API (BACKEND)
+│   ├── api/
+│   │   │
+│   │   ├── 📄 ARQUIVOS PRINCIPAIS
+│   │   │   ├── server.js        ← Servidor principal (entry point)
+│   │   │   ├── package.json     ← Dependências do projeto
+│   │   │   ├── .env             ← Configurações (não commitado)
+│   │   │   └── .env.example     ← Exemplo de configuração
+│   │   │
+│   │   ├── 📚 DOCUMENTAÇÃO
+│   │   │   ├── README.md        ← Docs da API
+│   │   │   ├── EXEMPLOS_API.md  ← Exemplos práticos
+│   │   │   ├── INSTALACAO.md    ← Guia de instalação
+│   │   │   ├── INTEGRACAO_N8N.md ← Integração WhatsApp
+│   │   │   └── RESUMO_IMPLEMENTACAO.md ← Resumo técnico
+│   │   │
+│   │   ├── 📁 src/
+│   │   │   │
+│   │   │   ├── 🛣️ routes/       ← Rotas da API
+│   │   │   │   ├── auth.routes.js      → Login/Registro
+│   │   │   │   ├── quartos.routes.js   → Gestão de quartos
+│   │   │   │   ├── reservas.routes.js  → Gestão de reservas
+│   │   │   │   └── webhooks.routes.js  → Webhooks PIX
+│   │   │   │
+│   │   │   ├── 🔧 services/     ← Lógica de negócio
+│   │   │   │   ├── auth.service.js     → Autenticação
+│   │   │   │   ├── reserva.service.js  → Reservas
+│   │   │   │   ├── hospede.service.js  → Hóspedes
+│   │   │   │   ├── pix.service.js      → Pagamentos PIX
+│   │   │   │   └── disponibilidade.service.js → Disponibilidade
+│   │   │   │
+│   │   │   ├── 🛡️ middlewares/  ← Middlewares
+│   │   │   │   ├── auth.js             → Verificação JWT
+│   │   │   │   ├── validation.js       → Validação de dados
+│   │   │   │   ├── errorHandler.js     → Tratamento de erros
+│   │   │   │   └── requestLogger.js    → Logs de requisições
+│   │   │   │
+│   │   │   ├── 🗄️ db/           ← Banco de dados
+│   │   │   │   ├── supabase.js         → Cliente Supabase
+│   │   │   │   ├── seed.js             → Popular dados iniciais
+│   │   │   │   └── migrations/
+│   │   │   │       └── 001_create_tables.sql → Schema completo
+│   │   │   │
+│   │   │   └── 🔨 utils/        ← Utilitários
+│   │   │       └── sanitize.js         → Sanitização de dados
+│   │   │
+│   │   └── 📊 logs/             ← Logs do sistema
+│   │       ├── combined.log     → Todos os logs
+│   │       └── error.log        → Apenas erros
+│
+├── 🎨 WEB (FRONTEND)
+│   ├── web/
+│   │   │
+│   │   ├── ⭐ PAINEL PRINCIPAL
+│   │   │   └── painel-simples.html ← Painel administrativo (RECOMENDADO)
+│   │   │
+│   │   ├── 📚 DOCUMENTAÇÃO
+│   │   │   ├── README.md        ← Docs do frontend
+│   │   │   └── GUIA_RAPIDO.md   ← Guia do painel
+│   │   │
+│   │   └── 📁 src/              ← Painel React (opcional)
+│   │       ├── App.jsx
+│   │       ├── main.jsx
+│   │       ├── index.css
+│   │       │
+│   │       ├── components/      ← Componentes React
+│   │       │   └── Layout.jsx
+│   │       │
+│   │       ├── contexts/        ← Contextos React
+│   │       │   └── AuthContext.jsx
+│   │       │
+│   │       ├── pages/           ← Páginas React
+│   │       │   ├── LoginPage.jsx
+│   │       │   ├── DashboardPage.jsx
+│   │       │   ├── QuartosPage.jsx
+│   │       │   └── ReservasPage.jsx
+│   │       │
+│   │       └── services/        ← Serviços React
+│   │           ├── api.js
+│   │           ├── auth.js
+│   │           └── storage.js
+│
+└── 📋 SPECS (KIRO)
+    └── .kiro/specs/hotel-residencial-hortel/
+        ├── requirements.md      ← Requisitos do sistema
+        ├── design.md            ← Design e arquitetura
+        └── tasks.md             ← Lista de tarefas
+
+════════════════════════════════════════════════════════════════════
+
+📊 ESTATÍSTICAS DO PROJETO
+
+Arquivos de Código:
+  • Backend (API):        ~20 arquivos
+  • Frontend (Painel):    ~10 arquivos
+  • Banco de Dados:       1 migration + 1 seed
+  • Total:                ~30 arquivos
+
+Documentação:
+  • Raiz do projeto:      11 documentos
+  • API:                  5 documentos
+  • Frontend:             2 documentos
+  • Total:                18 documentos
+
+Linhas de Código:
+  • Backend:              ~2.000 linhas
+  • Frontend:             ~1.000 linhas
+  • SQL:                  ~200 linhas
+  • Total:                ~3.200 linhas
+
+Endpoints API:
+  • Públicos:             6 endpoints
+  • Protegidos:           6 endpoints
+  • Total:                12 endpoints
+
+Tabelas Banco:
+  • quartos
+  • hospedes
+  • reservas
+  • pagamentos_pix
+  • funcionarios
+  • Total:                5 tabelas
+
+════════════════════════════════════════════════════════════════════
+
+🎯 ARQUIVOS MAIS IMPORTANTES
+
+Para Começar:
+  1. INICIAR.bat          → Inicia tudo
+  2. COMO_USAR.md         → Como usar
+  3. verificar.bat        → Verifica sistema
+
+Para Desenvolver:
+  1. api/server.js        → Entry point da API
+  2. api/src/routes/      → Rotas da API
+  3. api/src/services/    → Lógica de negócio
+  4. web/painel-simples.html → Painel admin
+
+Para Configurar:
+  1. api/.env             → Configurações
+  2. api/src/db/migrations/ → Schema do banco
+  3. api/src/db/seed.js   → Dados iniciais
+
+Para Entender:
+  1. ARQUITETURA.md       → Como funciona
+  2. api/README.md        → Documentação API
+  3. api/EXEMPLOS_API.md  → Exemplos práticos
+
+Para Resolver Problemas:
+  1. TROUBLESHOOTING.md   → Soluções
+  2. api/logs/error.log   → Logs de erro
+  3. CHECKLIST.md         → Verificação
+
+════════════════════════════════════════════════════════════════════
+
+🔍 NAVEGAÇÃO RÁPIDA
+
+Quer fazer...                    Vá para...
+─────────────────────────────────────────────────────────────────
+Iniciar o sistema                INICIAR.bat
+Ver documentação completa        INDEX.md
+Aprender a usar                  COMO_USAR.md
+Entender arquitetura             ARQUITETURA.md
+Resolver problemas               TROUBLESHOOTING.md
+Ver exemplos de API              api/EXEMPLOS_API.md
+Configurar WhatsApp              api/INTEGRACAO_N8N.md
+Instalar do zero                 api/INSTALACAO.md
+Usar o painel                    web/GUIA_RAPIDO.md
+Verificar sistema                verificar.bat
+Ver guia visual                  INICIO.txt
+
+════════════════════════════════════════════════════════════════════
+
+📦 DEPENDÊNCIAS PRINCIPAIS
+
+Backend (Node.js):
+  • express              → Framework web
+  • @supabase/supabase-js → Cliente PostgreSQL
+  • jsonwebtoken         → Autenticação JWT
+  • bcryptjs             → Hash de senhas
+  • joi                  → Validação
+  • winston              → Logging
+  • cors                 → CORS
+  • dotenv               → Variáveis de ambiente
+
+Frontend (Vanilla JS):
+  • Fetch API            → Requisições HTTP
+  • LocalStorage         → Armazenamento
+  • CSS Grid/Flexbox     → Layout
+
+Banco de Dados:
+  • Supabase             → PostgreSQL hospedado
+  • UUID                 → IDs únicos
+  • Timestamps           → Datas automáticas
+
+════════════════════════════════════════════════════════════════════
+
+✅ CHECKLIST DE ARQUIVOS
+
+Documentação:
+  ✅ README.md
+  ✅ INDEX.md
+  ✅ COMO_USAR.md
+  ✅ RESUMO_EXECUTIVO.md
+  ✅ ARQUITETURA.md
+  ✅ TROUBLESHOOTING.md
+  ✅ CHECKLIST.md
+  ✅ INICIO.txt
+  ✅ ESTRUTURA.txt
+
+Scripts:
+  ✅ INICIAR.bat
+  ✅ verificar.bat
+
+Backend:
+  ✅ api/server.js
+  ✅ api/.env.example
+  ✅ api/src/routes/
+  ✅ api/src/services/
+  ✅ api/src/middlewares/
+  ✅ api/src/db/
+
+Frontend:
+  ✅ web/painel-simples.html
+  ✅ web/src/
+
+Specs:
+  ✅ .kiro/specs/hotel-residencial-hortel/
+
+════════════════════════════════════════════════════════════════════
+
+🎉 SISTEMA COMPLETO E ORGANIZADO!
+
+Versão: 1.0.0
+Data: Novembro 2024
+Status: ✅ Pronto para uso
+
+════════════════════════════════════════════════════════════════════

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Residencial Hortel - Painel Administrativo</title>
+    <link rel="stylesheet" href="painel-admin.css">
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <h1 class="login-title">🏨 Residencial Hortel</h1>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha:</label>
+                    <input type="password" id="senha" required>
+                </div>
+                <button type="submit" class="btn btn-primary login-btn">Entrar</button>
+            </form>
+            <div id="loginError" class="error" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Painel Principal -->
+    <div id="mainPanel" style="display: none;">
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">🏨 Residencial Hortel</div>
+                <div class="user-info">
+                    <span id="userName">Administrador</span>
+                    <button class="logout-btn" onclick="logout()">Sair</button>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('dashboard')">📊 Dashboard</button>
+                <button class="tab" onclick="showTab('quartos')">🛏️ Quartos</button>
+                <button class="tab" onclick="showTab('reservas')">📅 Reservas</button>
+                <button class="tab" onclick="showTab('clientes')">👥 Clientes</button>
+                <button class="tab" onclick="showTab('configuracoes')">⚙️ Configurações</button>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalQuartos" style="color: #667eea;">-</div>
+                        <div class="stat-label">Total de Quartos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="quartosDisponiveis" style="color: #4CAF50;">-</div>
+                        <div class="stat-label">Quartos Disponíveis</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="quartosOcupados" style="color: #f44336;">-</div>
+                        <div class="stat-label">Quartos Ocupados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="reservasAtivas" style="color: #ff9800;">-</div>
+                        <div class="stat-label">Reservas Ativas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quartos Tab -->
+            <div id="quartos" class="tab-content">
+                <div class="filtro-data-container">
+                    <label for="filtroData">📅 Visualizar ocupação para:</label>
+                    <input type="date" id="filtroData" onchange="loadQuartos()">
+                    <button class="btn btn-secondary" onclick="resetarFiltroData()">Hoje</button>
+                </div>
+                <div id="quartosGrid" class="quartos-grid">
+                    <div class="loading">Carregando quartos...</div>
+                </div>
+            </div>
+
+            <!-- Reservas Tab -->
+            <div id="reservas" class="tab-content">
+                <div class="table-container">
+                    <h3>📅 Reservas</h3>
+                    <div id="reservasList">
+                        <div class="loading">Carregando reservas...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clientes Tab -->
+            <div id="clientes" class="tab-content">
+                <!-- Busca por CPF -->
+                <div class="search-section">
+                    <h3>🔍 Buscar Cliente por CPF</h3>
+                    <div class="search-form">
+                        <div class="form-group">
+                            <label for="cpfBusca">CPF:</label>
+                            <input type="text" id="cpfBusca" placeholder="000.000.000-00" maxlength="14">
+                        </div>
+                        <button class="btn btn-primary" onclick="buscarClientePorCPF()">Buscar</button>
+                    </div>
+                    <div id="clienteEncontrado" style="display: none; margin-top: 20px;">
+                        <h4>Cliente Encontrado:</h4>
+                        <div id="dadosCliente"></div>
+                    </div>
+                </div>
+
+                <!-- Lista de Clientes -->
+                <div class="table-container">
+                    <h3>👥 Todos os Clientes</h3>
+                    <div id="clientesList">
+                        <div class="loading">Carregando clientes...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configurações Tab -->
+            <div id="configuracoes" class="tab-content">
+                <div class="config-section">
+                    <h3>⚙️ Configurações do Sistema</h3>
+                    
+                    <div class="config-item">
+                        <div>
+                            <div class="config-label">Quartos Disponíveis para WhatsApp</div>
+                            <div class="config-description">Quantidade de quartos que aparecerão como disponíveis no atendimento via WhatsApp (para criar escassez)</div>
+                        </div>
+                        <input type="number" id="quartosWhatsApp" class="config-input" min="0" max="50" value="5">
+                    </div>
+                    
+                    <div class="config-item">
+                        <div>
+                            <div class="config-label">Horário de Check-in</div>
+                            <div class="config-description">Horário mínimo para check-in (formato 24h)</div>
+                        </div>
+                        <input type="number" id="horarioCheckin" class="config-input" min="0" max="23" value="13">
+                    </div>
+                    
+                    <div class="config-item">
+                        <div>
+                            <div class="config-label">Horário de Check-out</div>
+                            <div class="config-description">Horário máximo para check-out (formato 24h)</div>
+                        </div>
+                        <input type="number" id="horarioCheckout" class="config-input" min="0" max="23" value="11">
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="salvarConfiguracoes()">💾 Salvar Configurações</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ocupação de Quarto -->
+    <div id="modalOcupacao" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <h2>🛏️ Ocupar Quarto <span id="modalQuartoNumero"></span></h2>
+            
+            <form id="formOcupacao" onsubmit="ocuparQuarto(event)">
+                <h3 class="section-title">👤 RESPONSÁVEL</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hospedeNome">Nome Completo *</label>
+                        <input type="text" id="hospedeNome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hospedeCPF">CPF *</label>
+                        <input type="text" id="hospedeCPF" maxlength="14" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hospedeTelefone">Telefone *</label>
+                        <input type="text" id="hospedeTelefone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hospedeCidade">Cidade *</label>
+                        <input type="text" id="hospedeCidade" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hospedeEmail">Email</label>
+                        <input type="email" id="hospedeEmail">
+                    </div>
+                    <div class="form-group">
+                        <label for="hospedeCEP">CEP</label>
+                        <input type="text" id="hospedeCEP" maxlength="9">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 2;">
+                        <label for="hospedeRua">Rua</label>
+                        <input type="text" id="hospedeRua">
+                    </div>
+                    <div class="form-group">
+                        <label for="hospedeNumero">Número</label>
+                        <input type="text" id="hospedeNumero">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="hospedeBairro">Bairro</label>
+                    <input type="text" id="hospedeBairro">
+                </div>
+
+                <hr style="margin: 20px 0;">
+
+                <h3 class="section-title">📅 RESERVA</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dataCheckin">Data Check-in *</label>
+                        <input type="date" id="dataCheckin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dataCheckout">Data Check-out *</label>
+                        <input type="date" id="dataCheckout" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="numeroPessoas">Número de Pessoas *</label>
+                    <input type="number" id="numeroPessoas" min="1" max="3" required>
+                </div>
+
+                <hr style="margin: 20px 0;">
+
+                <h3 class="section-title">💰 PAGAMENTO</h3>
+
+                <div class="form-group">
+                    <label for="statusPagamento">Status do Pagamento *</label>
+                    <select id="statusPagamento" required onchange="toggleFormaPagamento()">
+                        <option value="">Selecione...</option>
+                        <option value="nao_pago">❌ Não Pago</option>
+                        <option value="pago">✅ Pago</option>
+                        <option value="sinal">💵 Sinal (Reserva WhatsApp)</option>
+                    </select>
+                </div>
+
+                <div id="formaPagamentoGroup" class="form-group" style="display: none;">
+                    <label for="formaPagamento">Forma de Pagamento *</label>
+                    <select id="formaPagamento">
+                        <option value="">Selecione...</option>
+                        <option value="dinheiro">💵 Dinheiro</option>
+                        <option value="cartao">💳 Cartão</option>
+                        <option value="pix">📱 PIX</option>
+                    </select>
+                </div>
+
+                <div id="valorPagoGroup" class="form-group" style="display: none;">
+                    <label for="valorPago">Valor Pago (R$) *</label>
+                    <input type="number" id="valorPago" min="0" step="0.01" placeholder="0.00">
+                </div>
+
+                <div id="valorSinalGroup" class="form-group" style="display: none;">
+                    <label for="valorSinal">Valor do Sinal (R$) *</label>
+                    <input type="number" id="valorSinal" min="0" step="0.01" placeholder="0.00">
+                </div>
+
+                <div class="form-row" style="gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-success" style="flex: 1;">
+                        ✅ Ocupar Quarto
+                    </button>
+                    <button type="button" id="btnDesocupar" class="btn btn-danger" style="flex: 1; display: none;" onclick="desocuparQuarto()">
+                        🚪 Desocupar Quarto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="painel-admin.js"></script>
+</body>
+</html>

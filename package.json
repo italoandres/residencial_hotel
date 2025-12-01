@@ -1,0 +1,31 @@
+{
+  "name": "hotel-residencial-hortel",
+  "version": "1.0.0",
+  "description": "Sistema de Gestão Hoteleira - Residencial Hortel",
+  "main": "api/src/server.js",
+  "scripts": {
+    "start": "cd api && npm start",
+    "install-api": "cd api && npm install",
+    "install-web": "cd web && npm install",
+    "build": "npm run install-api && npm run install-web",
+    "dev:api": "cd api && npm run dev",
+    "dev:web": "cd web && npm run dev"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": [
+    "hotel",
+    "gestao",
+    "reservas",
+    "quartos",
+    "pms"
+  ],
+  "author": "Residencial Hortel",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seu-usuario/hotel-residencial-hortel.git"
+  }
+}
