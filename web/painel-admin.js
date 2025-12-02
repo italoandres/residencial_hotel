@@ -543,21 +543,30 @@ document.getElementById('cpfBusca').addEventListener('input', function(e) {
 
 async function toggleWhatsApp(quartoId, disponivel) {
     try {
+        // Pegar a data selecionada no filtro
+        const filtroData = document.getElementById('filtroData');
+        const data = filtroData ? filtroData.value : new Date().toISOString().split('T')[0];
+        
+        if (!data) {
+            alert('Por favor, selecione uma data primeiro');
+            return;
+        }
+        
         const response = await fetch(`${API_URL}/quartos/${quartoId}/toggle-whatsapp`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ disponivel })
+            body: JSON.stringify({ disponivel, data })
         });
 
         if (response.ok) {
-            const data = await response.json();
+            const responseData = await response.json();
             // Mostrar feedback visual
             const toast = document.createElement('div');
             toast.className = 'toast success';
-            toast.textContent = data.message;
+            toast.textContent = responseData.message;
             document.body.appendChild(toast);
             
             setTimeout(() => {
@@ -567,8 +576,8 @@ async function toggleWhatsApp(quartoId, disponivel) {
             // Atualizar lista de quartos
             loadQuartos();
         } else {
-            const data = await response.json();
-            alert(data.error?.message || 'Erro ao atualizar disponibilidade');
+            const responseData = await response.json();
+            alert(responseData.error?.message || 'Erro ao atualizar disponibilidade');
         }
     } catch (error) {
         alert('Erro de conexão');

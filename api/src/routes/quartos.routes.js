@@ -68,11 +68,18 @@ router.get('/', validateQuartoQuery, async (req, res, next) => {
         
         if (error) {
           console.error('Erro ao buscar reservas:', error);
-          return {
-            ...quarto,
-            status: 'DISPONÍVEL'
-          };
         }
+        
+        // Buscar disponibilidade WhatsApp para esta data específica
+        const { data: dispWhatsApp } = await supabase
+          .from('disponibilidade_whatsapp')
+          .select('disponivel')
+          .eq('quarto_id', quarto.id)
+          .eq('data', dataStr)
+          .single();
+        
+        // Se não houver registro, considerar disponível por padrão
+        const disponivelWhatsApp = dispWhatsApp ? dispWhatsApp.disponivel : true;
         
         if (reservas && reservas.length > 0) {
           console.log(`Quarto ${quarto.numero}: OCUPADO (${reservas.length} reserva(s))`);
@@ -87,6 +94,7 @@ router.get('/', validateQuartoQuery, async (req, res, next) => {
           return {
             ...quarto,
             status: 'OCUPADO',
+            disponivel_whatsapp: disponivelWhatsApp,
             hospede: reserva.hospede,
             reserva: {
               id: reserva.id,
@@ -106,14 +114,16 @@ router.get('/', validateQuartoQuery, async (req, res, next) => {
           console.log(`Quarto ${quarto.numero}: DISPONÍVEL`);
           return {
             ...quarto,
-            status: 'DISPONÍVEL'
+            status: 'DISPONÍVEL',
+            disponivel_whatsapp: disponivelWhatsApp
           };
         }
       } catch (error) {
         console.error(`Erro ao processar quarto ${quarto.numero}:`, error);
         return {
           ...quarto,
-          status: 'DISPONÍVEL'
+          status: 'DISPONÍVEL',
+          disponivel_whatsapp: true
         };
       }
     }));
@@ -214,12 +224,12 @@ router.get('/:id', async (req, res, next) => {
 
 /**
  * PATCH /api/quartos/:id/toggle-whatsapp
- * Alterna disponibilidade fake do quarto para WhatsApp
+ * Alterna disponibilidade do quarto para WhatsApp em uma data específica
  */
 router.patch('/:id/toggle-whatsapp', async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { disponivel } = req.body;
+    const { disponivel, data } = req.body;
 
     // Validar que disponivel é boolean
     if (typeof disponivel !== 'boolean') {
@@ -230,15 +240,23 @@ router.patch('/:id/toggle-whatsapp', async (req, res, next) => {
       );
     }
 
-    // Atualizar quarto
-    const { data: quarto, error } = await supabase
+    // Validar que data foi fornecida
+    if (!data) {
+      throw new AppError(
+        'VALIDATION_ERROR',
+        'Campo "data" é obrigatório (formato: YYYY-MM-DD)',
+        400
+      );
+    }
+
+    // Verificar se o quarto existe
+    const { data: quarto, error: errorQuarto } = await supabase
       .from('quartos')
-      .update({ disponivel_whatsapp: disponivel })
+      .select('numero')
       .eq('id', id)
-      .select()
       .single();
 
-    if (error || !quarto) {
+    if (errorQuarto || !quarto) {
       throw new AppError(
         'NOT_FOUND',
         'Quarto não encontrado',
@@ -246,9 +264,32 @@ router.patch('/:id/toggle-whatsapp', async (req, res, next) => {
       );
     }
 
+    // Inserir ou atualizar disponibilidade para a data específica
+    const { data: disponibilidadeData, error } = await supabase
+      .from('disponibilidade_whatsapp')
+      .upsert({
+        quarto_id: id,
+        data: data,
+        disponivel: disponivel,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'quarto_id,data'
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Erro ao atualizar disponibilidade:', error);
+      throw new AppError(
+        'DATABASE_ERROR',
+        'Erro ao atualizar disponibilidade',
+        500
+      );
+    }
+
     res.json({ 
-      quarto,
-      message: `Quarto ${quarto.numero} marcado como ${disponivel ? 'disponível' : 'indisponível'} para WhatsApp`
+      disponibilidade: disponibilidadeData,
+      message: `Quarto ${quarto.numero} marcado como ${disponivel ? 'disponível' : 'indisponível'} para WhatsApp em ${data}`
     });
   } catch (error) {
     next(error);
